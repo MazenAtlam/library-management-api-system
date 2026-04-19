@@ -30,6 +30,7 @@ public class BookService {
 
     /**
      * Retrieves all books with pagination.
+     * Calls the optimized findAll method in the repository to prevent N+1 issues.
      */
     @Transactional(readOnly = true)
     public Page<BookResponseDTO> getAllBooks(Pageable pageable) {
@@ -101,7 +102,7 @@ public class BookService {
 
     /**
      * Searches for books based on optional title, genre, and publishedYear.
-     * Marked as @Transactional to handle lazy loading of associated Author entities.
+     * Calls the optimized searchBooks method in the repository to prevent N+1 issues.
      */
     @Transactional(readOnly = true)
     public Page<BookResponseDTO> searchBooks(String title, String genre, Integer publishedYear, Pageable pageable) {
