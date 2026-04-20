@@ -3,6 +3,7 @@ package com.example.library.service;
 import com.example.library.dto.AuthorRequestDTO;
 import com.example.library.dto.AuthorResponseDTO;
 import com.example.library.entity.Author;
+import com.example.library.exception.ResourceNotFoundException;
 import com.example.library.mapper.AuthorMapper;
 import com.example.library.repository.AuthorRepository;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,7 @@ public class AuthorService {
 
     public AuthorResponseDTO getAuthorById(Long id) {
         Author author = authorRepository.findById(id)
-                .orElseThrow(() -> new IllegalStateException("Author not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Author", id));
         return authorMapper.toResponseDTO(author);
     }
 
@@ -51,7 +52,7 @@ public class AuthorService {
     @Transactional
     public AuthorResponseDTO updateAuthorById(Long id, AuthorRequestDTO dto) {
         Author author = authorRepository.findById(id)
-                .orElseThrow(() -> new IllegalStateException("Author not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Author", id));
 
         updateIfChanged(dto.getFirstName(), author.getFirstName(), author::setFirstName);
         updateIfChanged(dto.getLastName(), author.getLastName(), author::setLastName);
@@ -66,7 +67,7 @@ public class AuthorService {
 
     public void deleteAuthorById(Long id) {
         if (!authorRepository.existsById(id)) {
-            throw new IllegalStateException("Author not found");
+            throw new ResourceNotFoundException("Author", id);
         }
         authorRepository.deleteById(id);
     }
