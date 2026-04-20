@@ -16,10 +16,10 @@ public interface BorrowRecordRepository extends JpaRepository<BorrowRecord, Long
     boolean existsByBookIdAndReturnDateIsNull(Long bookId);
 
     // Resolves N+1 Problem for member's borrow records
-    @Query("SELECT br FROM BorrowRecord br JOIN FETCH br.book JOIN FETCH br.member WHERE br.member.id = :memberId")
+    @Query("SELECT br FROM BorrowRecord br JOIN FETCH br.book b JOIN FETCH b.author JOIN FETCH br.member WHERE br.member.id = :memberId")
     List<BorrowRecord> findByMemberIdWithDetails(@Param("memberId") Long memberId);
 
     // Resolves N+1 Problem for active borrow records
-    @Query("SELECT br FROM BorrowRecord br JOIN FETCH br.book JOIN FETCH br.member WHERE br.returnDate IS NULL")
+    @Query("SELECT br FROM BorrowRecord br JOIN FETCH br.book b JOIN FETCH b.author JOIN FETCH br.member WHERE br.returnDate IS NULL")
     List<BorrowRecord> findActiveRecordsWithDetails();
 }
