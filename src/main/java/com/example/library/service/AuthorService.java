@@ -8,6 +8,9 @@ import com.example.library.repository.AuthorRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -23,10 +26,9 @@ public class AuthorService {
         this.authorMapper = authorMapper;
     }
 
-    public List<AuthorResponseDTO> getAllAuthors() {
-        return authorRepository.findAll().stream()
-                .map(authorMapper::toResponseDTO)
-                .toList();
+    public Page<AuthorResponseDTO> getAllAuthors(Pageable pageable) {
+        return authorRepository.findAll(pageable)
+                .map(authorMapper::toResponseDTO);
     }
 
     public AuthorResponseDTO getAuthorById(Long id) {
