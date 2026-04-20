@@ -31,8 +31,8 @@ This is a RESTful API for managing a library system built with Spring Boot. The 
 1. Clone the repository:
 
    ```bash
-   git clone <repository-url>
-   cd library_management
+   git clone https://github.com/MazenAtlam/library-management-api-system.git
+   cd library-management-api-system
    ```
 
 2. Build the project:
