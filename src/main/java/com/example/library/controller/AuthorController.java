@@ -6,6 +6,10 @@ import com.example.library.service.AuthorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+
 import java.util.List;
 
 @RestController
@@ -19,8 +23,8 @@ public class AuthorController {
     }
 
     @GetMapping
-    public List<AuthorResponseDTO> getAuthors() {
-        return authorService.getAllAuthors();
+    public ResponseEntity<Page<AuthorResponseDTO>> getAuthors(Pageable pageable) {
+        return ResponseEntity.ok(authorService.getAllAuthors(pageable));
     }
 
     @GetMapping("/{id}")

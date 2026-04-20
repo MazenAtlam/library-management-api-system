@@ -4,6 +4,7 @@ import com.example.library.dto.BookRequestDTO;
 import com.example.library.dto.BookResponseDTO;
 import com.example.library.entity.Author;
 import com.example.library.entity.Book;
+import com.example.library.exception.ResourceNotFoundException;
 import com.example.library.mapper.BookMapper;
 import com.example.library.repository.AuthorRepository;
 import com.example.library.repository.BookRepository;
@@ -45,7 +46,7 @@ public class BookService {
     @Transactional(readOnly = true)
     public BookResponseDTO getBookById(Long id) {
         Book book = bookRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Book not found with ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Book", id));
         return bookMapper.toResponseDTO(book);
     }
 
@@ -55,7 +56,7 @@ public class BookService {
     @Transactional
     public BookResponseDTO createBook(BookRequestDTO dto) {
         Author author = authorRepository.findById(dto.getAuthorId())
-                .orElseThrow(() -> new IllegalArgumentException("Author not found with ID: " + dto.getAuthorId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Author", dto.getAuthorId()));
 
         Book book = bookMapper.toEntity(dto);
         // Explicitly set the fully loaded author reference since MapStruct might just set the ID
@@ -71,7 +72,7 @@ public class BookService {
     @Transactional
     public BookResponseDTO updateBook(Long id, BookRequestDTO dto) {
         Book existingBook = bookRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Book not found with ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Book", id));
 
         existingBook.setTitle(dto.getTitle());
         existingBook.setIsbn(dto.getIsbn());
@@ -81,7 +82,7 @@ public class BookService {
         // Update the author if the ID is different
         if (dto.getAuthorId() != null && !dto.getAuthorId().equals(existingBook.getAuthor().getId())) {
             Author newAuthor = authorRepository.findById(dto.getAuthorId())
-                    .orElseThrow(() -> new IllegalArgumentException("Author not found with ID: " + dto.getAuthorId()));
+                    .orElseThrow(() -> new ResourceNotFoundException("Author", dto.getAuthorId()));
             existingBook.setAuthor(newAuthor);
         }
 
@@ -95,7 +96,7 @@ public class BookService {
     @Transactional
     public void deleteBook(Long id) {
         if (!bookRepository.existsById(id)) {
-            throw new IllegalArgumentException("Book not found with ID: " + id);
+            throw new ResourceNotFoundException("Book", id);
         }
         bookRepository.deleteById(id);
     }
