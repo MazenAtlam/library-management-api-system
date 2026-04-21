@@ -98,14 +98,14 @@ During the implementation of the `GET /api/books` and `GET /api/borrow-records/a
 - `GET /api/borrow-records/member/{memberId}` - Get all borrow records for a specific member
 - `GET /api/borrow-records/active` - Get all currently borrowed books (returnDate is null)
 
-## Testing via Postman
+## Building and Testing
 
 This repository includes a comprehensive Postman collection to easily test all API endpoints, including happy paths, edge cases, and N+1 assessments.
 
 **To use the collection:**
 
 1. Open Postman.
-2. Click on **Import** in the top left corner.
+2. Click on the `downward-pointing-arrowhead` button in the top left corner > `File` > `Import` Or `Ctrl + O` for shortcut.
 3. Select the `Postman_Test_Collection.json` file located in the root of this repository.
 4. Run the endpoints sequentially to observe the API's behavior.
 
